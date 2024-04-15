@@ -10,17 +10,18 @@ public class GameManager : MonoBehaviour
     public class Card
     {
         public int Id;
-        public GameObject CardPiece;
+        public GameObject CardUnit;
 
         // Constructor
         public Card(int id, GameObject obj)
         {
             Id = id;
-            CardPiece = obj;
+            CardUnit = obj;
+            CardUnit.GetComponent<Renderer>().material.SetTexture("_MainTex", Resources.Load<Texture2D>("Cards/Card_" + Id));
         }
     }
     // Create list of crads
-    public List<Card> allCards = new List<Card>();
+    public List<Card> Cards = new List<Card>();
 
     // Generating the grid
     public GameObject CardPrefab;
@@ -32,10 +33,39 @@ public class GameManager : MonoBehaviour
             for (int y = 0; y < Grid.y; y++)
             {
                 GameObject NewCard = Instantiate(CardPrefab, new Vector3(x, y, 0), Quaternion.Euler(0, 0, 0), transform);
-                allCards.Add(new Card(x + y, NewCard));
+
+                int id = Random.Range(0, 10);
+
+                while (RepeatingId(id) == true)
+                {
+                    id = Random.Range(0, 10);
+                }
+                Cards.Add(new Card(id, NewCard));
+
+
             }
         }
     }
+    // Game Logic
+    public bool RepeatingId(int n)
+    {
+        int counter = 0;
+        for (int i = 0; i < Cards.Count; i++)
+        {
+            if (n == Cards[i].Id)
+            {
+                counter++;
+            }
+        }
+
+        if (counter == 2)
+        {
+            return true;
+        }
+        return false;
+    }
+
+
     void Start()
     {
         InitCard();
