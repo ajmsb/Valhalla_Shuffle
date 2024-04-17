@@ -34,6 +34,10 @@ public class GameManager : MonoBehaviour
 
 	void Update()
 	{
+
+
+
+
 		if (Input.GetMouseButtonDown(0))
 		{
 			RaycastHit2D ClickInfo;
@@ -41,15 +45,18 @@ public class GameManager : MonoBehaviour
 				Camera.main.ScreenToWorldPoint(
 					new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), Vector3.zero, Mathf.Infinity);
 
-			if (ClickInfo)
+			if (ClickInfo.collider == null)
 			{
-				if (ClickInfo.transform.tag == "Card")
+				Debug.Log("No object clicked.");
+			}
+			else
+			{
+				if (ClickInfo.transform.CompareTag("Card"))
 				{
-					print("1");
+					Debug.Log("Card clicked.");
 				}
 			}
 		}
-
 	}
 
 	// Function to Initialize Cards
