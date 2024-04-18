@@ -25,6 +25,11 @@ public class Menu : MonoBehaviour
         SceneManager.LoadScene(4);
     }
 
+    public void Rewards()
+    {
+        SceneManager.LoadScene(5);
+    }
+
     public void QuitGame()
     {
         Application.Quit();
