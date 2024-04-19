@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -23,41 +24,13 @@ public class GameManager : MonoBehaviour
 	// Create list of crads
 	public List<Card> Cards = new List<Card>();
 
+	public List<Card> SelectedCards = new List<Card>();
+
+
 	// Generating the grid
 	public GameObject CardPrefab;
 	public Vector2 Grid;
-
-	void Start()
-	{
-		InitCard();
-	}
-
-	void Update()
-	{
-
-
-
-
-		if (Input.GetMouseButtonDown(0))
-		{
-			RaycastHit2D ClickInfo;
-			ClickInfo = Physics2D.Raycast(
-				Camera.main.ScreenToWorldPoint(
-					new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), Vector3.zero, Mathf.Infinity);
-
-			if (ClickInfo.collider == null)
-			{
-				Debug.Log("No object clicked.");
-			}
-			else
-			{
-				if (ClickInfo.transform.CompareTag("Card"))
-				{
-					Debug.Log("Card clicked.");
-				}
-			}
-		}
-	}
+	public Card LastClickedCard;
 
 	// Function to Initialize Cards
 	public void InitCard()
@@ -99,8 +72,63 @@ public class GameManager : MonoBehaviour
 		return false;
 	}
 
+	public Card GetCard(GameObject HitInfoCollider)
+	{
+		for (int i = 0; i < Cards.Count; i++)
+		{
+			if (HitInfoCollider == Cards[i].CardUnit)
+			{
+				return Cards[i];
+			}
+		}
+		return null;
+	}
+	void Start()
+	{
+		InitCard();
+	}
+	void Update()
+	{
 
+		if (Input.GetMouseButtonDown(0))
+		{
+			RaycastHit2D ClickInfo;
+			ClickInfo = Physics2D.Raycast(
+				Camera.main.ScreenToWorldPoint(
+					new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0)), Vector3.zero, Mathf.Infinity);
 
-
+			if (ClickInfo.collider == null)
+			{
+				Debug.Log("No object clicked.");
+			}
+			else
+			{
+				if (ClickInfo.transform.CompareTag("Card"))
+				{
+					LastClickedCard = GetCard(ClickInfo.transform.gameObject);
+					if (SelectedCards.Contains(LastClickedCard) == false)
+					{
+						SelectedCards.Add(LastClickedCard);
+						LastClickedCard.CardUnit.transform.rotation = Quaternion.Euler(0, 0, 0);
+					}
+					if (SelectedCards.Count == 2)
+					{
+						if (SelectedCards[0].Id == SelectedCards[1].Id)
+						{
+							Destroy(SelectedCards[0].CardUnit);
+							Destroy(SelectedCards[1].CardUnit);
+							SelectedCards.Clear();
+						}
+						else
+						{
+							SelectedCards[0].CardUnit.transform.rotation = Quaternion.Euler(0, 180, 0);
+							SelectedCards[1].CardUnit.transform.rotation = Quaternion.Euler(0, 180, 0);
+							SelectedCards.Clear();
+						}
+					}
+				}
+			}
+		}
+	}
 
 }
