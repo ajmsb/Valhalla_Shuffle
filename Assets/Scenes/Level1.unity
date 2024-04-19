@@ -245,8 +245,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cards: []
+  SelectedCards: []
   CardPrefab: {fileID: 6987765830806999785, guid: e02f25454465145dfa6d48dc156a0aa0, type: 3}
   Grid: {x: 5, y: 4}
+  LastClickedCard:
+    Id: 0
+    CardUnit: {fileID: 0}
 --- !u!4 &768087047
 Transform:
   m_ObjectHideFlags: 0
