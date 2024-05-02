@@ -21,10 +21,10 @@ public class GameManager : MonoBehaviour
 		}
 	}
 
-	// Create list of crads
+	// Create list of cards
 	public List<Card> Cards = new List<Card>();
-
 	public List<Card> SelectedCards = new List<Card>();
+	public List<Card> NewCardsList = new List<Card>();
 
 
 	// Generating the grid
@@ -83,13 +83,29 @@ public class GameManager : MonoBehaviour
 		}
 		return null;
 	}
+
+	public void RevealCards()
+	{
+		foreach (var item in Cards)
+		{
+			item.CardUnit.transform.rotation = Quaternion.Euler(0, 0, 0);
+		}
+	}
+
+	public void HideCards()
+	{
+		foreach (var item in Cards)
+		{
+			item.CardUnit.transform.rotation = Quaternion.Euler(0, 180, 0);
+		}
+	}
+
 	void Start()
 	{
 		InitCard();
 	}
 	void Update()
 	{
-
 		if (Input.GetMouseButtonDown(0))
 		{
 			RaycastHit2D ClickInfo;
@@ -99,25 +115,50 @@ public class GameManager : MonoBehaviour
 
 			if (ClickInfo.collider == null)
 			{
-				Debug.Log("No object clicked.");
+				Debug.Log("No Card clicked.");
 			}
 			else
 			{
 				if (ClickInfo.transform.CompareTag("Card"))
 				{
 					LastClickedCard = GetCard(ClickInfo.transform.gameObject);
+
+					//! Should we Have more Bonus Cards? 
+					// if (LastClickedCard.Id == 5)
+					// {
+					// 	Destroy(LastClickedCard.CardUnit);
+					// 	Cards.Remove(LastClickedCard);
+					// }
+
+					// ADD Selected Card to SelectedCards List
 					if (SelectedCards.Contains(LastClickedCard) == false)
 					{
 						SelectedCards.Add(LastClickedCard);
 						LastClickedCard.CardUnit.transform.rotation = Quaternion.Euler(0, 0, 0);
 					}
+
 					if (SelectedCards.Count == 2)
 					{
 						if (SelectedCards[0].Id == SelectedCards[1].Id)
 						{
-							Destroy(SelectedCards[0].CardUnit);
-							Destroy(SelectedCards[1].CardUnit);
-							SelectedCards.Clear();
+							if (SelectedCards[0].Id == 0 && SelectedCards[0].Id == 0)
+							{
+								RevealCards();
+								Cards.Remove(SelectedCards[0]);
+								Cards.Remove(SelectedCards[1]);
+								Destroy(SelectedCards[0].CardUnit);
+								Destroy(SelectedCards[1].CardUnit);
+								Invoke("HideCards", 3);
+								SelectedCards.Clear();
+							}
+							else
+							{
+								Cards.Remove(SelectedCards[0]);
+								Cards.Remove(SelectedCards[1]);
+								Destroy(SelectedCards[0].CardUnit);
+								Destroy(SelectedCards[1].CardUnit);
+								SelectedCards.Clear();
+							}
 						}
 						else
 						{
@@ -126,6 +167,7 @@ public class GameManager : MonoBehaviour
 							SelectedCards.Clear();
 						}
 					}
+
 				}
 			}
 		}
