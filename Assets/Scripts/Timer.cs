@@ -16,7 +16,7 @@ public class Timer : MonoBehaviour
     }
 
 
-    private void FixedUpdate()
+     private void FixedUpdate()
     {
         if (timeValue <= 0)
         {
