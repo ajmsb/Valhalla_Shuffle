@@ -126,13 +126,13 @@ public class GameManager : MonoBehaviour
 					LastClickedCard = GetCard(ClickInfo.transform.gameObject);
 
 					//! Should we Have more Bonus Cards? 
-					if (LastClickedCard.Id == 5)
-					{
-						Timer.timeValue = Timer.timeValue + 5f;
-						Debug.Log(Timer.timeValue);
-                        Destroy(LastClickedCard.CardUnit);
-						Cards.Remove(LastClickedCard);
-                    }
+					// if (LastClickedCard.Id == 5)
+					// {
+					// 	Timer.timeValue = Timer.timeValue + 5f;
+					// 	Debug.Log(Timer.timeValue);
+					// 	Destroy(LastClickedCard.CardUnit);
+					// 	Cards.Remove(LastClickedCard);
+					// }
 
 					// ADD Selected Card to SelectedCards List
 					if (SelectedCards.Contains(LastClickedCard) == false)
